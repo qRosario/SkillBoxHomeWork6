@@ -13,11 +13,10 @@ namespace SkillBoxHomeWork6
 
         static void TextWriter()
         {
-            
             string[] workers = new string[7];
-            
+
             int count = File.ReadAllLines("d:\\Workers.txt").Length;
-            workers[0] = Convert.ToString(count);
+            workers[0] = Convert.ToString(count + 1);
             workers[1] = DateTime.Now.ToString("g");
             Console.Write("Введите Ф.И.О сотрудника\n");
             workers[2] = Console.ReadLine();
@@ -28,29 +27,41 @@ namespace SkillBoxHomeWork6
             Console.Write("Введите дату рождения\n");
             workers[5] = Console.ReadLine();
             Console.Write("Укажите место рождения сотрудника\n");
-            workers[6] = Console.ReadLine();
-            
-            using (StreamWriter writer = new StreamWriter("d:\\Workers.txt", true))
-            {
+            workers[6] = Console.ReadLine(); 
 
+            using (StreamWriter writer = new StreamWriter("d:\\Workers.txt", true))
+            {     
                 writer.WriteLine(string.Join("#", workers));
-                writer.Close(); 
+                writer.Close();
             }
-           
 
         }
         static void TextReader()
-        { 
-            
-            string line = File.ReadAllText("d:\\Workers.txt");
-            char[] charToTrim = {'#'};
-            string result = line.Trim(charToTrim);
-            Console.Write(result);
-  
+        {
+            string oldText = File.ReadAllText("d:\\Workers.txt");
+            string[] word = oldText.Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var result in word)
+            {
+                Console.Write(result + " ");
+            }
+
         }
         static void Main(string[] args)
         {
-            TextReader();
+            using (FileStream file = new FileStream("d:\\Workers.txt", FileMode.Append, FileAccess.Write))
+                file.Close();
+            Console.WriteLine("Введите цифру 1 для вывода данных на экран");
+            Console.WriteLine("Введите цифру 2 для добавления данных в файл");
+            int result = int.Parse(Console.ReadLine());
+
+            if(result == 1)
+            {
+                TextReader();
+            }
+            else if (result == 2)
+            {
+                TextWriter();
+            }
         }
     }
 }
